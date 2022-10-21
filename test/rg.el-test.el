@@ -1165,6 +1165,17 @@ and ungrouped otherwise."
       (should (equal default-directory search-dir2))
       (rg-wait-for-search-result))))
 
+(ert-deftest rg-integration/imenu ()
+  "Verify that `imenu-create-index-function' works."
+  :tags '(need-rg)
+  (rg-run "pattern" "everything" (concat default-directory "test/data/imenu"))
+  (with-current-buffer (rg-buffer-name)
+    (rg-wait-for-search-result)
+    (let ((imenu-index (funcall imenu-create-index-function)))
+      (should (equal (mapcar #'car imenu-index)
+                     '("File" "Foo")))
+      (should (cl-every #'integerp (mapcar #'cdr imenu-index))))))
+
 (provide 'rg.el-test)
 
 ;;; rg.el-test.el ends here

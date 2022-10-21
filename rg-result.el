@@ -777,8 +777,8 @@ previous file with grouped matches."
               (while (setq nextfile (rg-navigate-file-message nextfile nil 1))
                 (save-excursion
                   (goto-char nextfile)
-                  (skip-chars-forward "File: ")
-                  (setq filepath (buffer-substring-no-properties (point) (line-end-position))))
+                  (setq filepath (buffer-substring-no-properties
+                                  (+ (point) (length "File: ")) (line-end-position))))
                 (push (cons filepath nextfile) elements))
               (nreverse elements))))))
 
